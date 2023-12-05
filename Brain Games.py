@@ -1,6 +1,12 @@
 #We randomly select a madlib for the user
 import random
 
+#Word list for Word Guessing Game
+def load_word_list():
+    file_path = "Brain Games Word List.txt"
+    with open(file_path, "r") as file:
+        return [line.strip() for line in file]
+
 #10 madlib story structures to be called
 def madlib_1():
     adj1 = input("Enter an adjective: ")
@@ -144,28 +150,68 @@ def madlib_10():
     print(madlib_story)    
 
 #main calls this, which then calls a random madlib
-def generate_random_mad_lib():
+def generate_random_madlib():
     madlib_functions = [madlib_1, madlib_2, madlib_3, madlib_4, madlib_5, 
                         madlib_6, madlib_7, madlib_8, madlib_9, madlib_10]
     selected_madlib = random.choice(madlib_functions)
     selected_madlib()
 
-#Welcome user, offer madlib, offer to exit
+#main calls this, which then calls for a random word from .txt
+def word_guessing_game(word_list):
+    word_to_guess = random.choice(word_list)
+    guessed_word = ["_"] * len(word_to_guess)
+    attempts = 6
+
+    print("Welcome to the Word Guessing Game!")
+    print("Can you guess the word?")
+    print(" ".join(guessed_word))
+
+    while attempts > 0:
+        guess = input("Enter a letter: ").lower()
+
+        if len(guess) == 1 and guess.isalpha():
+            if guess in word_to_guess:
+                print("Good guess!")
+                for i in range(len(word_to_guess)):
+                    if word_to_guess[i] == guess:
+                        guessed_word[i] = guess
+            else:
+                print("Incorrect guess. Try again.")
+                attempts -= 1
+
+            print("Attempts left:", attempts)
+            print(" ".join(guessed_word))
+
+            if "_" not in guessed_word:
+                print("Congratulations! You guessed the word:", word_to_guess)
+                break
+        else:
+            print("Invalid input. Please enter a single letter.")
+
+    if attempts == 0:
+        print("Sorry, you've run out of attempts. The word was:", word_to_guess)
+
+#Welcome user. Then offer madlib, word guess, or to exit
 def main():
+    word_list = load_word_list()
+    
     while True:
         print("Welcome to the Random Mad Libs App!")
-        print("1 - Get a Random Mad Lib")
-        print("2 - Exit the application")
+        print("1. Get a Random Mad Lib")
+        print("2. Play Word Guessing Game")
+        print("3. Exit the application")
 
         choice = input("Enter the number of your choice: ")
 
         if choice == "1":
-            generate_random_mad_lib()
+            generate_random_madlib()
         elif choice == "2":
-            print("Exiting Mad Libs app. Goodbye!")
+            word_guessing_game(word_list)
+        elif choice == "3":
+            print("Exiting the Word Games app. Goodbye!")
             break
         else:
-            print("Invalid choice. Please enter either 1 or 2.")
+            print("Invalid choice. Please enter either 1, 2, or 3.")
             print("Quinn - So help me God if you use recursion to crash another app")
 
 if __name__ == "__main__":
