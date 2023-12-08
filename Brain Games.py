@@ -191,15 +191,77 @@ def word_guessing_game(word_list):
     if attempts == 0:
         print("Sorry, you've run out of attempts. The word was:", word_to_guess)
 
-#Welcome user. Then offer madlib, word guess, or to exit
+#trivia game function + its questions
+def trivia_game(questions, num_questions=10):
+    score = 0
+    random.shuffle(questions)
+
+    for i, (question, choices, correct_answer) in enumerate(questions[:num_questions], start=1):
+        user_answer = ask_question(question, choices)
+        if user_answer.isdigit() and 1 <= int(user_answer) <= 4:
+            user_answer = int(user_answer)
+            if choices[user_answer - 1] == correct_answer:
+                print("Correct!\n")
+                score += 1
+            else:
+                print(f"Wrong! The correct answer is {correct_answer}\n")
+        else:
+            print("Invalid input. Please enter a number between 1 and 4.\n")
+
+    print(f"Your final score is: {score} out of 10")
+    return score
+
+def ask_question(question, choices):
+    print(question)
+    for i, choice in enumerate(choices, start=1):
+        print(f"{i}. {choice}")
+    user_answer = input("Enter the number of your answer (1-4): ")
+    return user_answer
+
+questions = [
+    ("What is the capital of Australia?", ["Sydney", "Melbourne", "Canberra", "Perth"], "Canberra"),
+    ("Which planet is known as the 'Red Planet'?", ["Earth", "Mars", "Venus", "Jupiter"], "Mars"),
+    ("What is the largest mammal in the world?", ["Elephant", "Blue Whale", "Giraffe", "Hippopotamus"], "Blue Whale"),
+    ("In what year did the Titanic sink?", ["1905", "1912", "1920", "1931"], "1912"),
+    ("Who wrote 'Romeo and Juliet'?", ["Charles Dickens", "William Shakespeare", "Jane Austen", "Emily Brontë"], "William Shakespeare"),
+    ("What is the chemical symbol for gold?", ["Au", "Ag", "Fe", "Cu"], "Au"),
+    ("Which ocean is the largest?", ["Atlantic Ocean", "Indian Ocean", "Southern Ocean", "Pacific Ocean"], "Pacific Ocean"),
+    ("How many continents are there?", ["5", "6", "7", "8"], "7"),
+    ("What is the capital of Japan?", ["Beijing", "Seoul", "Tokyo", "Bangkok"], "Tokyo"),
+    ("Who painted the Mona Lisa?", ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Claude Monet"], "Leonardo da Vinci"),
+    ("Which planet is known as the 'Morning Star'?", ["Earth", "Mars", "Venus", "Jupiter"], "Venus"),
+    ("Who was the first woman to win a Nobel Prize?", ["Marie Curie", "Ada Lovelace", "Jane Goodall", "Rosalind Franklin"], "Marie Curie"),
+    ("What is the largest organ in the human body?", ["Heart", "Brain", "Liver", "Skin"], "Skin"),
+    ("In which year did World War II end?", ["1943", "1945", "1950", "1960"], "1945"),
+    ("Who wrote 'To Kill a Mockingbird'?", ["Harper Lee", "J.K. Rowling", "Ernest Hemingway", "George Orwell"], "Harper Lee"),
+    ("What is the capital of Brazil?", ["Rio de Janeiro", "São Paulo", "Brasília", "Salvador"], "Brasília"),
+    ("Which element has the chemical symbol 'O'?", ["Osmium", "Oxygen", "Gold", "Iron"], "Oxygen"),
+    ("How many bones are in the adult human body?", ["206", "214", "230", "248"], "206"),
+    ("What is the world's largest desert?", ["Sahara Desert", "Arctic Desert", "Antarctic Desert", "Gobi Desert"], "Antarctic Desert"),
+    ("Who invented the telephone?", ["Thomas Edison", "Alexander Graham Bell", "Nikola Tesla", "Michael Faraday"], "Alexander Graham Bell"),
+    ("What is the largest ocean mammal?", ["Dolphin", "Whale Shark", "Narwhal", "Blue Whale"], "Blue Whale"),
+    ("In what year did the Berlin Wall fall?", ["1985", "1989", "1991", "1995"], "1989"),
+    ("Who wrote '1984'?", ["George Orwell", "Aldous Huxley", "Ray Bradbury", "F. Scott Fitzgerald"], "George Orwell"),
+    ("What is the currency of Japan?", ["Yuan", "Euro", "Yen", "Dollar"], "Yen"),
+    ("Which famous scientist developed the theory of general relativity?", ["Isaac Newton", "Galileo Galilei", "Albert Einstein", "Stephen Hawking"], "Albert Einstein"),
+    ("What is the largest planet in our solar system?", ["Earth", "Mars", "Jupiter", "Saturn"], "Jupiter"),
+    ("In what year did the first manned moon landing occur?", ["1965", "1969", "1972", "1975"], "1969"),
+    ("Who is known as the 'Father of Computer Science'?", ["Ada Lovelace", "Alan Turing", "Charles Babbage", "Bill Gates"], "Alan Turing"),
+    ("What is the smallest prime number?", ["0", "1", "2", "3"], "2"),
+    ("Which famous artist painted the 'Starry Night'?", ["Vincent van Gogh", "Pablo Picasso", "Claude Monet", "Leonardo da Vinci"], "Vincent van Gogh"),
+]
+
+#Welcome user. Then offer madlib, word guess, trivia, or exit
 def main():
     word_list = load_word_list()
     
     while True:
-        print("Welcome to the Random Mad Libs App!")
-        print("1. Get a Random Mad Lib")
-        print("2. Play Word Guessing Game")
-        print("3. Exit the application")
+        print("Welcome to the Brain Teaser App!")
+        print("Please select one of the following:")
+        print("1. Mad Libs")
+        print("2. Word Guessing")
+        print("3. Trvia") 
+        print("4. Exit the application")
 
         choice = input("Enter the number of your choice: ")
 
@@ -208,6 +270,8 @@ def main():
         elif choice == "2":
             word_guessing_game(word_list)
         elif choice == "3":
+            trivia_game(questions, num_questions=10)
+        elif choice == "4":
             print("Exiting the Word Games app. Goodbye!")
             break
         else:
